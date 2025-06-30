@@ -26,11 +26,21 @@ jobs:
       
     - name: Install Android NDK
       run: |
-        echo "y" | sdkmanager "ndk;25.2.9519653"
-        echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
+        echo "y" | sdkmanager "ndk;26.1.10909125"
+        echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/26.1.10909125" >> $GITHUB_ENV
+        
+    - name: Download Gradle Wrapper JAR
+      run: |
+        curl -L -o gradle/wrapper/gradle-wrapper.jar https://github.com/gradle/gradle/raw/v8.14.2/gradle/wrapper/gradle-wrapper.jar
+        
+    - name: Make gradlew executable
+      run: chmod +x gradlew
+      
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v1
         
     - name: Cache Gradle packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.gradle/caches
@@ -39,17 +49,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
           
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build --stacktrace --info
       
     - name: Run unit tests
-      run: ./gradlew test
+      run: ./gradlew test --stacktrace
       
     - name: Build APK
-      run: ./gradlew assembleDebug
+      run: ./gradlew assembleDebug --stacktrace
       
     - name: Upload APK as artifact
       uses: actions/upload-artifact@v4
@@ -60,7 +67,7 @@ jobs:
         
     - name: Create Release APK
       if: github.ref == 'refs/heads/main'
-      run: ./gradlew assembleRelease
+      run: ./gradlew assembleRelease --stacktrace
       
     - name: Upload Release APK
       if: github.ref == 'refs/heads/main'

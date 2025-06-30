@@ -1,12 +1,13 @@
 {
   "name": "virtual-camera-manager-android",
   "version": "1.0.0",
-  "description": "Android Virtual Camera Manager with HAL Integration",
+  "description": "Android Virtual Camera Manager with HAL Integration and RTMP Support",
   "main": "index.js",
   "scripts": {
     "android:build": "./gradlew assembleDebug",
     "android:install": "./gradlew installDebug",
     "android:clean": "./gradlew clean",
+    "android:test": "./gradlew test",
     "setup": "echo 'Android project setup complete. Use gradle commands to build.'"
   },
   "repository": {
@@ -20,12 +21,14 @@
     "hal",
     "virtual-camera",
     "root",
-    "native"
+    "native",
+    "rtmp",
+    "streaming"
   ],
   "author": "Virtual Camera Manager Team",
   "license": "MIT",
   "devDependencies": {},
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   }
 }
